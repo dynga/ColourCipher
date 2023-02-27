@@ -9,5 +9,12 @@
 </head>
 <body>
 
+<div id="container">
+    <textarea id="source" oninput="encode()" onfocusin="clearOnce()" onfocusout="resetIfBlank()" contenteditable></textarea>
+    <textarea id="target" readonly>
+    Enable JavaScript
+    </textarea>
+</div>
+
 </body>
 </html>

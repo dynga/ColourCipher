@@ -1,8 +1,5 @@
 const epsilon = 10;
 
-const source = document.getElementById('source');
-const target = document.getElementById('target');
-
 const cipher = [
     ['a', ['#FFBF00']],
     ['b', ['#000000', '#AF6E4D']],
@@ -33,6 +30,8 @@ const cipher = [
 ]
 
 function encode() {
+    let source = document.getElementById('source');
+    let target = document.getElementById('target');
     let text = source.value;
     for (let i = 0; i < cipher.length; i++) {
         text = text.replaceAll(cipher[i][0], prepareHexCode(cipher[i][1]) + ' ')
@@ -42,6 +41,7 @@ function encode() {
 
 let fresh = true;
 function clearOnce() {
+    let source = document.getElementById('source');
     if (fresh) {
         source.value = '';
         source.style.color = 'black';
@@ -49,13 +49,15 @@ function clearOnce() {
     }
 }
 function resetIfBlank() {
+    let source = document.getElementById('source');
+    let target = document.getElementById('target');
     if (source.value === '') {
         source.style.color = 'grey';
         source.value = 'aeiouy';
         target.style.color = 'grey';
         target.value = 'aeioue';
         // copyButton.style.display = "none";
-        // fresh = true;
+        fresh = true;
     }
 }
 
@@ -125,8 +127,17 @@ function decArrToHex(decArr) {
  * @returns {*}
  */
 function randomizeDecArr(decArr, limit) {
-    decArr[0] = Math.abs(decArr[0] + randNumWithinEpsilon(epsilon, limit));
-    decArr[1] = Math.abs(decArr[1] + randNumWithinEpsilon(epsilon, limit));
-    decArr[2] = Math.abs(decArr[2] + randNumWithinEpsilon(epsilon, limit));
+    decArr[0] = ensureRgbRange(decArr[0] + randNumWithinEpsilon(epsilon, limit));
+    decArr[1] = ensureRgbRange(decArr[1] + randNumWithinEpsilon(epsilon, limit));
+    decArr[2] = ensureRgbRange(decArr[2] + randNumWithinEpsilon(epsilon, limit));
     return decArr;
+}
+
+function ensureRgbRange(value) {
+    let result = Math.abs(value);
+    if (result > 255) {
+        return 255;
+    } else {
+        return result;
+    }
 }

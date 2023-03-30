@@ -6,14 +6,18 @@
     <link rel="stylesheet" href="./css/bootstrap.css">
     <script src="./js/bootstrap.js"></script>
     <script src="./js/cipher.js"></script>
+    <script src="https://randojs.com/2.0.0.js"></script>
 </head>
-<body>
+<body class="d-flex flex-column h-100">
+
+<main class="flex-shrink-0" margin="auto">
+    <div class="container" margin="auto">
+        <textarea margin="auto" id="source" oninput="encode()" onfocusin="clearOnce()" onfocusout="resetIfBlank()" contenteditable></textarea>
+        <textarea margin="auto" id="target" readonly>Enable JavaScript</textarea>
+    </div>
+</main>
 
 
-<div id="container">
-    <textarea id="source" oninput="encode()" onfocusin="clearOnce()" onfocusout="resetIfBlank()" contenteditable></textarea>
-    <textarea id="target" readonly>Enable JavaScript</textarea>
-</div>
 
 </body>
 </html>

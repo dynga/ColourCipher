@@ -1,42 +1,101 @@
 const epsilon = 10;
 
-const cipher = [
-    ['a', ['#FFBF00']],
-    ['b', ['#000000', '#AF6E4D']],
-    ['c', ['#00FFFF']],
-    ['d', ['#1560BD', '#C19A6B']],
-    ['e', ['#50C878']],
-    ['f', ['#FF00FF']],
-    ['g', ['#808080']],
-    ['h', ['#3FFF00']],
-    ['i', ['#4B0082', '#F4F0EC']],
-    ['j', ['#F8DE7E']],
-    ['k', ['#C3B091']],
-    ['l', ['#C8A2C8', '#B57EDC']],
-    ['m', ['#C32148']],
-    ['n', ['#727472']],
-    ['o', ['#FF7F00', '#CC7722']],
-    ['p', ['#FFC0CB', '#DF00FF']],
-    ['q', ['#8E3A59']],
-    ['r', ['#FF0000']],
-    ['s', ['#87CEEB']],
-    ['t', ['#40E0D0', '#008080']],
-    ['u', ['#3F00FF']],
-    ['v', ['#8601AF', '#CEFF00']],
-    ['w', ['#FFFFFF']],
-    ['x', ['#EEED09']],
-    ['y', ['#FFF700']],
-    ['z', ['#39A78E']]
-]
+// const cipher = [
+//     ['a', ['#FFBF00']],
+//     ['b', ['#000000', '#AF6E4D']],
+//     ['c', ['#00FFFF']],
+//     ['d', ['#1560BD', '#C19A6B']],
+//     ['e', ['#50C878']],
+//     ['f', ['#FF00FF']],
+//     ['g', ['#808080']],
+//     ['h', ['#3FFF00']],
+//     ['i', ['#4B0082', '#F4F0EC']],
+//     ['j', ['#F8DE7E']],
+//     ['k', ['#C3B091']],
+//     ['l', ['#C8A2C8', '#B57EDC']],
+//     ['m', ['#C32148']],
+//     ['n', ['#727472']],
+//     ['o', ['#FF7F00', '#CC7722']],
+//     ['p', ['#FFC0CB', '#DF00FF']],
+//     ['q', ['#8E3A59']],
+//     ['r', ['#FF0000']],
+//     ['s', ['#87CEEB']],
+//     ['t', ['#40E0D0', '#008080']],
+//     ['u', ['#3F00FF']],
+//     ['v', ['#8601AF', '#CEFF00']],
+//     ['w', ['#FFFFFF']],
+//     ['x', ['#EEED09']],
+//     ['y', ['#FFF700']],
+//     ['z', ['#39A78E']]
+// ]
 
+function cipher(letter) {
+    switch(letter) {
+        case 'a':
+            return ['#FFBF00'];
+        case 'b':
+            return ['#000000', '#AF6E4D'];
+        case 'c':
+            return ['#00FFFF'];
+        case 'd':
+            return ['#1560BD', '#C19A6B'];
+        case 'e':
+            return ['#50C878'];
+        case 'f':
+            return ['#FF00FF'];
+        case 'g':
+            return ['#808080'];
+        case 'h':
+            return ['#3FFF00'];
+        case 'i':
+            return ['#4B0082', '#F4F0EC'];
+        case 'j':
+            return ['#F8DE7E'];
+        case 'k':
+            return ['#C3B091'];
+        case 'l':
+            return ['#C8A2C8', '#B57EDC'];
+        case 'm':
+            return ['#C32148'];
+        case 'n':
+            return ['#727472'];
+        case 'o':
+            return ['#FF7F00', '#CC7722'];
+        case 'p':
+            return ['#FFC0CB', '#DF00FF'];
+        case 'q':
+            return ['#8E3A59'];
+        case 'r':
+            return ['#FF0000'];
+        case 's':
+            return ['#87CEEB'];
+        case 't':
+            return ['#40E0D0', '#008080'];
+        case 'u':
+            return ['#3F00FF'];
+        case 'v':
+            return ['#8601AF', '#CEFF00'];
+        case 'w':
+            return ['#FFFFFF'];
+        case 'x':
+            return ['#EEED09'];
+        case 'y':
+            return ['#FFF700'];
+        case 'z':
+            return ['#39A78E'];
+        case ' ':
+            return [''];
+    }
+}
 function encode() {
     let source = document.getElementById('source');
     let target = document.getElementById('target');
     let text = source.value;
-    for (let i = 0; i < cipher.length; i++) {
-        text = text.replaceAll(cipher[i][0], prepareHexCode(cipher[i][1]) + ' ')
+    let result = '';
+    for (let i = 0; i < text.length; i += 1) {
+        result = result.concat(prepareHexCode(cipher(text[i].toLowerCase())), ' ');
     }
-    target.value = text;
+    target.value = result;
 }
 
 let fresh = true;
@@ -53,9 +112,9 @@ function resetIfBlank() {
     let target = document.getElementById('target');
     if (source.value === '') {
         source.style.color = 'grey';
-        source.value = 'aeiouy';
+        source.value = 'Input text to encode here';
         target.style.color = 'grey';
-        target.value = 'aeioue';
+        target.value = 'Encoded text will appear here';
         // copyButton.style.display = "none";
         fresh = true;
     }
@@ -64,6 +123,9 @@ function resetIfBlank() {
 function prepareHexCode(hexArray) {
     let picked = pickRandomFromArray(hexArray);
     switch(picked) {
+        //Space. Just leave it alone.
+        case '':
+            return '';
         //Those hex codes need to be exact. Do not randomize.
         case '#FFFFFF':
         case '#EEED09':
@@ -82,7 +144,7 @@ function prepareHexCode(hexArray) {
 }
 
 function randPosOrNeg() {
-    switch (Math.floor(Math.random() * 2)) {
+    switch (Math.floor(rando() * 2)) {
         case 0:
             return -1;
         case 1:
@@ -95,12 +157,13 @@ function randomizeHexCode(hexCode, coeff) {
 }
 
 function randNumWithinEpsilon(epsilon, coeff) {
-    let num = Math.floor(Math.random() * epsilon)
+    let num = Math.floor(rando() * epsilon)
     return num * coeff;
 }
 
 function pickRandomFromArray(array) {
-    return array[Math.floor(Math.random() * array.length)];
+    // return array[Math.floor(Math.random() * array.length)];
+    return array[Math.floor(rando() * array.length)];
 }
 
 function hexToDecArr(hex) {
